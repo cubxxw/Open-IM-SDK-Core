@@ -12,30 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package mw
+package cache
 
 import (
 	"fmt"
+	"github.com/OpenIMSDK/Open-IM-Server/pkg/common/config"
 	"testing"
 )
 
-func TestCheck(t *testing.T) {
-	// config.Config.TokenPolicy.Secret = "123456"
-
-	args := []string{"1", "2", "3"}
-
-	key := genReqKey(args)
-	fmt.Println("key:", key)
-	err := verifyReqKey(args, key)
-
-	fmt.Println(err)
-
-	args = []string{"4", "5", "6"}
-
-	key = genReqKey(args)
-	fmt.Println("key:", key)
-	err = verifyReqKey(args, key)
-
-	fmt.Println(err)
-
+//TestNewRedis Test redis connection
+func TestNewRedis(t *testing.T) {
+	err := config.InitConfig("config_folder_path")
+	if err != nil {
+		fmt.Println("config load error")
+		return
+	}
+	redis, err := NewRedis()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(redis)
 }
