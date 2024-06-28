@@ -19,7 +19,7 @@ Currently, there are two different platforms involved in running the CI processe
 All the existing GitHub Actions are defined as YAML files under the `.github/workflows` directory. These can be grouped into:
 
 - **PR Checks**. These actions run all the required validations upon PR creation and update. Covering the DCO compliance check, `x86_64` test batteries (unit, integration, smoke), and code coverage.
-- **Repository automation**. Currently, it only covers issues and epic grooming.
+- **Repository automation**. Currently, it only covers issues and epic grooming. Note: Ensure the BOT_GITHUB_TOKEN is set in the GitHub secrets for the repository. This token is used by the stale.yml workflow to mark and close stale issues and pull requests.
 
 Everything runs on GitHub's provided runners; thus, the tests are limited to run in `x86_64` architectures.
 
