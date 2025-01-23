@@ -17,8 +17,9 @@ package open_im_sdk
 import (
 	"context"
 	"errors"
-	"github.com/OpenIMSDK/tools/log"
+
 	"github.com/openimsdk/openim-sdk-core/v3/open_im_sdk_callback"
+	"github.com/openimsdk/tools/log"
 )
 
 var ErrNotImplemented = errors.New("not set listener")
@@ -142,17 +143,21 @@ func newEmptyConversationListener(ctx context.Context) open_im_sdk_callback.OnCo
 	return &emptyConversationListener{ctx: ctx}
 }
 
-func (e *emptyConversationListener) OnSyncServerStart() {
-
+func (e *emptyConversationListener) OnSyncServerStart(reinstalled bool) {
 	log.ZWarn(e.ctx, "ConversationListener is not implemented", nil)
 }
 
-func (e *emptyConversationListener) OnSyncServerFinish() {
+func (e *emptyConversationListener) OnSyncServerProgress(progress int) {
+	log.ZWarn(e.ctx, "ConversationListener is not implemented", nil,
+		"progress", progress)
+}
+
+func (e *emptyConversationListener) OnSyncServerFinish(reinstalled bool) {
 	log.ZWarn(e.ctx, "ConversationListener is not implemented", nil)
 
 }
 
-func (e *emptyConversationListener) OnSyncServerFailed() {
+func (e *emptyConversationListener) OnSyncServerFailed(reinstalled bool) {
 
 	log.ZWarn(e.ctx, "ConversationListener is not implemented", nil)
 }
@@ -191,7 +196,7 @@ func (e *emptyAdvancedMsgListener) OnRecvOnlineOnlyMessage(message string) {
 }
 
 func (e *emptyAdvancedMsgListener) OnRecvNewMessage(message string) {
-	log.ZWarn(e.ctx, "AdvancedMsgListener is not implemented", nil, "message", message)
+	log.ZWarn(e.ctx, "AdvancedMsgListener is not implemented OnRecvNewMessage", nil, "message", message)
 }
 
 func (e *emptyAdvancedMsgListener) OnRecvC2CReadReceipt(msgReceiptList string) {
@@ -207,6 +212,10 @@ func (e *emptyAdvancedMsgListener) OnRecvGroupReadReceipt(groupMsgReceiptList st
 
 func (e *emptyAdvancedMsgListener) OnNewRecvMessageRevoked(messageRevoked string) {
 	log.ZWarn(e.ctx, "AdvancedMsgListener is not implemented", nil, "messageRevoked", messageRevoked)
+}
+
+func (e *emptyAdvancedMsgListener) OnMsgEdited(msg string) {
+	log.ZWarn(e.ctx, "OnMsgEdited is not implemented", nil, "msg", msg)
 }
 
 func (e *emptyAdvancedMsgListener) OnRecvMessageExtensionsChanged(msgID string, reactionExtensionList string) {
@@ -230,20 +239,6 @@ func (e *emptyAdvancedMsgListener) OnRecvOfflineNewMessage(message string) {
 
 func (e *emptyAdvancedMsgListener) OnMsgDeleted(message string) {
 	log.ZWarn(e.ctx, "AdvancedMsgListener is not implemented", nil, "message", message)
-}
-
-type emptyBatchMsgListener struct{}
-
-func newEmptyBatchMsgListener() *emptyBatchMsgListener {
-	return &emptyBatchMsgListener{}
-}
-
-func (e *emptyBatchMsgListener) OnRecvNewMessages(messageList string) {
-
-}
-
-func (e *emptyBatchMsgListener) OnRecvOfflineNewMessages(messageList string) {
-
 }
 
 type emptyUserListener struct {

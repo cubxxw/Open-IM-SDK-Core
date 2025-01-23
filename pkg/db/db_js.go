@@ -17,6 +17,7 @@ package db
 import (
 	"context"
 	"errors"
+
 	"github.com/openimsdk/openim-sdk-core/v3/wasm/exec"
 	"github.com/openimsdk/openim-sdk-core/v3/wasm/indexdb"
 )
@@ -27,22 +28,20 @@ type IndexDB struct {
 	*indexdb.LocalUsers
 	*indexdb.LocalConversations
 	*indexdb.LocalChatLogs
-	*indexdb.LocalSuperGroupChatLogs
-	*indexdb.LocalSuperGroup
 	*indexdb.LocalConversationUnreadMessages
 	*indexdb.LocalGroups
 	*indexdb.LocalGroupMember
-	*indexdb.LocalCacheMessage
 	*indexdb.FriendRequest
 	*indexdb.Black
 	*indexdb.Friend
 	*indexdb.LocalGroupRequest
-	*indexdb.LocalChatLogReactionExtensions
 	*indexdb.NotificationSeqs
 	*indexdb.LocalUpload
-	*indexdb.LocalStrangers
 	*indexdb.LocalSendingMessages
 	*indexdb.LocalUserCommand
+	*indexdb.LocalVersionSync
+	*indexdb.LocalAppSDKVersion
+	*indexdb.LocalTableMaster
 	loginUserID string
 }
 
@@ -61,22 +60,20 @@ func NewDataBase(ctx context.Context, loginUserID string, dbDir string, logLevel
 		LocalUsers:                      indexdb.NewLocalUsers(),
 		LocalConversations:              indexdb.NewLocalConversations(),
 		LocalChatLogs:                   indexdb.NewLocalChatLogs(loginUserID),
-		LocalSuperGroupChatLogs:         indexdb.NewLocalSuperGroupChatLogs(),
-		LocalSuperGroup:                 indexdb.NewLocalSuperGroup(),
 		LocalConversationUnreadMessages: indexdb.NewLocalConversationUnreadMessages(),
 		LocalGroups:                     indexdb.NewLocalGroups(),
 		LocalGroupMember:                indexdb.NewLocalGroupMember(),
-		LocalCacheMessage:               indexdb.NewLocalCacheMessage(),
 		FriendRequest:                   indexdb.NewFriendRequest(loginUserID),
 		Black:                           indexdb.NewBlack(loginUserID),
 		Friend:                          indexdb.NewFriend(loginUserID),
 		LocalGroupRequest:               indexdb.NewLocalGroupRequest(),
-		LocalChatLogReactionExtensions:  indexdb.NewLocalChatLogReactionExtensions(),
 		NotificationSeqs:                indexdb.NewNotificationSeqs(),
 		LocalUpload:                     indexdb.NewLocalUpload(),
-		LocalStrangers:                  indexdb.NewLocalStrangers(),
 		LocalSendingMessages:            indexdb.NewLocalSendingMessages(),
 		LocalUserCommand:                indexdb.NewLocalUserCommand(),
+		LocalVersionSync:                indexdb.NewLocalVersionSync(),
+		LocalAppSDKVersion:              indexdb.NewLocalAppSDKVersion(),
+		LocalTableMaster:                indexdb.NewLocalTableMaster(),
 		loginUserID:                     loginUserID,
 	}
 	err := i.InitDB(ctx, loginUserID, dbDir)
