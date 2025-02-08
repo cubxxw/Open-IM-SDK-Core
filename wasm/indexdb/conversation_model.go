@@ -19,10 +19,12 @@ package indexdb
 
 import (
 	"context"
+
 	"github.com/openimsdk/openim-sdk-core/v3/pkg/db/model_struct"
 	"github.com/openimsdk/openim-sdk-core/v3/pkg/utils"
 	"github.com/openimsdk/openim-sdk-core/v3/wasm/exec"
 	"github.com/openimsdk/openim-sdk-core/v3/wasm/indexdb/temp_struct"
+	"github.com/openimsdk/tools/errs"
 )
 
 type LocalConversations struct {
@@ -48,6 +50,23 @@ func (i *LocalConversations) GetAllConversationListDB(ctx context.Context) (resu
 				result = append(result, &v1)
 			}
 			return result, err
+		} else {
+			return nil, exec.ErrType
+		}
+	}
+}
+
+func (i *LocalConversations) FindAllUnreadConversationConversationID(ctx context.Context) (result []string, err error) {
+	cList, err := exec.Exec()
+	if err != nil {
+		return nil, err
+	} else {
+		if v, ok := cList.(string); ok {
+			err := utils.JsonStringToStruct(v, &result)
+			if err != nil {
+				return nil, err
+			}
+			return result, nil
 		} else {
 			return nil, exec.ErrType
 		}
@@ -173,6 +192,11 @@ func (i *LocalConversations) DeleteConversation(ctx context.Context, conversatio
 	return err
 }
 
+func (i *LocalConversations) DeleteAllConversation(ctx context.Context) error {
+	_, err := exec.Exec()
+	return err
+}
+
 func (i *LocalConversations) UpdateConversation(ctx context.Context, c *model_struct.LocalConversation) error {
 	if c.ConversationID == "" {
 		return exec.PrimaryKeyNull
@@ -225,7 +249,7 @@ func (i *LocalConversations) BatchUpdateConversationList(ctx context.Context, co
 	for _, v := range conversationList {
 		err := i.UpdateConversation(ctx, v)
 		if err != nil {
-			return utils.Wrap(err, "BatchUpdateConversationList failed")
+			return errs.WrapMsg(err, "BatchUpdateConversationList failed")
 		}
 
 	}
@@ -375,14 +399,14 @@ func (i *LocalConversations) SearchConversations(ctx context.Context, searchPara
 	// Perform the search operation. Replace the below line with the actual search logic.
 	searchResult, err := exec.Exec(searchParam)
 	if err != nil {
-		return nil, utils.Wrap(err, "SearchConversations failed")
+		return nil, errs.WrapMsg(err, "SearchConversations failed")
 	}
 
 	// Convert searchResult to []*model_struct.LocalConversation
 	// Assuming searchResult is in a format that can be converted to the required type
 	err = utils.JsonStringToStruct(searchResult.(string), &result)
 	if err != nil {
-		return nil, utils.Wrap(err, "Failed to parse search results")
+		return nil, errs.WrapMsg(err, "Failed to parse search results")
 	}
 
 	return result, nil
