@@ -18,11 +18,12 @@
 package event_listener
 
 import (
-	"github.com/openimsdk/openim-sdk-core/v3/internal/file"
+	"syscall/js"
+
+	"github.com/openimsdk/openim-sdk-core/v3/internal/third/file"
 	"github.com/openimsdk/openim-sdk-core/v3/open_im_sdk_callback"
 	"github.com/openimsdk/openim-sdk-core/v3/pkg/utils"
 	"github.com/openimsdk/openim-sdk-core/v3/sdk_struct"
-	"syscall/js"
 )
 
 type ConnCallback struct {
@@ -75,16 +76,19 @@ type ConversationCallback struct {
 func NewConversationCallback(callback *js.Value) *ConversationCallback {
 	return &ConversationCallback{CallbackWriter: NewEventData(callback)}
 }
-func (c ConversationCallback) OnSyncServerStart() {
-	c.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SendMessage()
+func (c ConversationCallback) OnSyncServerStart(reinstalled bool) {
+	c.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SetData(reinstalled).SendMessage()
 }
 
-func (c ConversationCallback) OnSyncServerFinish() {
-	c.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SendMessage()
+func (c ConversationCallback) OnSyncServerFinish(reinstalled bool) {
+	c.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SetData(reinstalled).SendMessage()
+}
+func (c ConversationCallback) OnSyncServerProgress(progress int) {
+	c.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SetData(progress).SendMessage()
 }
 
-func (c ConversationCallback) OnSyncServerFailed() {
-	c.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SendMessage()
+func (c ConversationCallback) OnSyncServerFailed(reinstalled bool) {
+	c.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SetData(reinstalled).SendMessage()
 
 }
 
@@ -163,6 +167,10 @@ func (a AdvancedMsgCallback) OnMsgDeleted(message string) {
 }
 
 func (a AdvancedMsgCallback) OnRecvOnlineOnlyMessage(message string) {
+	a.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SetData(message).SendMessage()
+}
+
+func (a AdvancedMsgCallback) OnMsgEdited(message string) {
 	a.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SetData(message).SendMessage()
 }
 
@@ -302,13 +310,6 @@ type BatchMessageCallback struct {
 
 func NewBatchMessageCallback(callback *js.Value) *BatchMessageCallback {
 	return &BatchMessageCallback{CallbackWriter: NewEventData(callback)}
-}
-
-func (b *BatchMessageCallback) OnRecvNewMessages(messageList string) {
-	b.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SetData(messageList).SendMessage()
-}
-func (b *BatchMessageCallback) OnRecvOfflineNewMessages(messageList string) {
-	b.CallbackWriter.SetEvent(utils.GetSelfFuncName()).SetData(messageList).SendMessage()
 }
 
 type FriendCallback struct {

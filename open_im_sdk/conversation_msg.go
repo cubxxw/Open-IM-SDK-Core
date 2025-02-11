@@ -15,6 +15,8 @@
 package open_im_sdk
 
 import (
+	"context"
+
 	"github.com/openimsdk/openim-sdk-core/v3/open_im_sdk_callback"
 )
 
@@ -34,47 +36,16 @@ func GetMultipleConversation(callback open_im_sdk_callback.Base, operationID str
 	call(callback, operationID, UserForSDK.Conversation().GetMultipleConversation, conversationIDList)
 }
 
-func SetConversationMsgDestructTime(callback open_im_sdk_callback.Base, operationID string, conversationID string, msgDestructTime int64) {
-	call(callback, operationID, UserForSDK.Conversation().SetConversationMsgDestructTime, conversationID, msgDestructTime)
+func SetConversation(callback open_im_sdk_callback.Base, operationID string, conversationID string, req string) {
+	call(callback, operationID, UserForSDK.Conversation().SetConversation, conversationID, req)
 }
 
-func SetConversationIsMsgDestruct(callback open_im_sdk_callback.Base, operationID string, conversationID string, isMsgDestruct bool) {
-	call(callback, operationID, UserForSDK.Conversation().SetConversationIsMsgDestruct, conversationID, isMsgDestruct)
-}
-func SetConversationEx(callback open_im_sdk_callback.Base, operationID string, conversationID string, ex string) {
-	call(callback, operationID, UserForSDK.Conversation().SetOneConversationEx, conversationID, ex)
-}
 func HideConversation(callback open_im_sdk_callback.Base, operationID string, conversationID string) {
 	call(callback, operationID, UserForSDK.Conversation().HideConversation, conversationID)
 }
 
-// deprecated
-func GetConversationRecvMessageOpt(callback open_im_sdk_callback.Base, operationID string, conversationIDList string) {
-	call(callback, operationID, UserForSDK.Conversation().GetConversationRecvMessageOpt, conversationIDList)
-}
-
 func SetConversationDraft(callback open_im_sdk_callback.Base, operationID string, conversationID string, draftText string) {
 	call(callback, operationID, UserForSDK.Conversation().SetConversationDraft, conversationID, draftText)
-}
-
-func ResetConversationGroupAtType(callback open_im_sdk_callback.Base, operationID string, conversationID string) {
-	call(callback, operationID, UserForSDK.Conversation().ResetConversationGroupAtType, conversationID)
-}
-
-func PinConversation(callback open_im_sdk_callback.Base, operationID string, conversationID string, isPinned bool) {
-	call(callback, operationID, UserForSDK.Conversation().PinConversation, conversationID, isPinned)
-}
-
-func SetConversationPrivateChat(callback open_im_sdk_callback.Base, operationID string, conversationID string, isPrivate bool) {
-	call(callback, operationID, UserForSDK.Conversation().SetOneConversationPrivateChat, conversationID, isPrivate)
-}
-
-func SetConversationBurnDuration(callback open_im_sdk_callback.Base, operationID string, conversationID string, duration int32) {
-	call(callback, operationID, UserForSDK.Conversation().SetOneConversationBurnDuration, conversationID, duration)
-}
-
-func SetConversationRecvMessageOpt(callback open_im_sdk_callback.Base, operationID string, conversationID string, opt int) {
-	call(callback, operationID, UserForSDK.Conversation().SetOneConversationRecvMessageOpt, conversationID, opt)
 }
 
 func GetTotalUnreadMsgCount(callback open_im_sdk_callback.Base, operationID string) {
@@ -110,42 +81,17 @@ func CreateCardMessage(operationID string, cardInfo string) string {
 	return syncCall(operationID, UserForSDK.Conversation().CreateCardMessage, cardInfo)
 
 }
-func CreateVideoMessageFromFullPath(operationID string, videoFullPath string, videoType string, duration int64, snapshotFullPath string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateVideoMessageFromFullPath, videoFullPath, videoType, duration, snapshotFullPath)
+func CreateImageMessage(operationID string, imageSourcePath string, sourcePicture, bigPicture, snapshotPicture string) string {
+	return syncCall(operationID, UserForSDK.Conversation().CreateImageMessage, imageSourcePath, sourcePicture, bigPicture, snapshotPicture)
 }
-func CreateImageMessageFromFullPath(operationID string, imageFullPath string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateImageMessageFromFullPath, imageFullPath)
+func CreateSoundMessage(operationID string, soundPath string, duration int64, soundBaseInfo string) string {
+	return syncCall(operationID, UserForSDK.Conversation().CreateSoundMessage, soundPath, duration, soundBaseInfo)
 }
-func CreateSoundMessageFromFullPath(operationID string, soundPath string, duration int64) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateSoundMessageFromFullPath, soundPath, duration)
+func CreateVideoMessage(operationID string, videoSourcePath string, videoType string, duration int64, snapshotSourcePath string, videoBaseInfo string) string {
+	return syncCall(operationID, UserForSDK.Conversation().CreateVideoMessage, videoSourcePath, videoType, duration, snapshotSourcePath, videoBaseInfo)
 }
-func CreateFileMessageFromFullPath(operationID string, fileFullPath, fileName string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateFileMessageFromFullPath, fileFullPath, fileName)
-}
-func CreateImageMessage(operationID string, imagePath string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateImageMessage, imagePath)
-}
-func CreateImageMessageByURL(operationID string, sourcePath string, sourcePicture, bigPicture, snapshotPicture string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateImageMessageByURL, sourcePath, sourcePicture, bigPicture, snapshotPicture)
-}
-
-func CreateSoundMessageByURL(operationID string, soundBaseInfo string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateSoundMessageByURL, soundBaseInfo)
-}
-func CreateSoundMessage(operationID string, soundPath string, duration int64) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateSoundMessage, soundPath, duration)
-}
-func CreateVideoMessageByURL(operationID string, videoBaseInfo string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateVideoMessageByURL, videoBaseInfo)
-}
-func CreateVideoMessage(operationID string, videoPath string, videoType string, duration int64, snapshotPath string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateVideoMessage, videoPath, videoType, duration, snapshotPath)
-}
-func CreateFileMessageByURL(operationID string, fileBaseInfo string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateFileMessageByURL, fileBaseInfo)
-}
-func CreateFileMessage(operationID string, filePath string, fileName string) string {
-	return syncCall(operationID, UserForSDK.Conversation().CreateFileMessage, filePath, fileName)
+func CreateFileMessage(operationID string, fileSourcePath string, fileName string, fileBaseInfo string) string {
+	return syncCall(operationID, UserForSDK.Conversation().CreateFileMessage, fileSourcePath, fileName, fileBaseInfo)
 }
 func CreateMergerMessage(operationID string, messageList, title, summaryList string) string {
 	return syncCall(operationID, UserForSDK.Conversation().CreateMergerMessage, messageList, title, summaryList)
@@ -157,13 +103,10 @@ func CreateForwardMessage(operationID string, m string) string {
 	return syncCall(operationID, UserForSDK.Conversation().CreateForwardMessage, m)
 }
 func GetConversationIDBySessionType(operationID string, sourceID string, sessionType int) string {
-	return syncCall(operationID, UserForSDK.Conversation().GetConversationIDBySessionType, sourceID, sessionType)
+	return UserForSDK.Conversation().GetConversationIDBySessionType(context.Background(), sourceID, sessionType)
 }
 func SendMessage(callback open_im_sdk_callback.SendMsgCallBack, operationID, message, recvID, groupID, offlinePushInfo string, isOnlineOnly bool) {
 	messageCall(callback, operationID, UserForSDK.Conversation().SendMessage, message, recvID, groupID, offlinePushInfo, isOnlineOnly)
-}
-func SendMessageNotOss(callback open_im_sdk_callback.SendMsgCallBack, operationID string, message, recvID, groupID string, offlinePushInfo string, isOnlineOnly bool) {
-	messageCall(callback, operationID, UserForSDK.Conversation().SendMessageNotOss, message, recvID, groupID, offlinePushInfo, isOnlineOnly)
 }
 
 func FindMessageList(callback open_im_sdk_callback.Base, operationID string, findMessageOptions string) {
@@ -191,6 +134,10 @@ func MarkConversationMessageAsRead(callback open_im_sdk_callback.Base, operation
 	call(callback, operationID, UserForSDK.Conversation().MarkConversationMessageAsRead, conversationID)
 }
 
+func MarkAllConversationMessageAsRead(callback open_im_sdk_callback.Base, operationID string) {
+	call(callback, operationID, UserForSDK.Conversation().MarkAllConversationMessageAsRead)
+}
+
 func MarkMessagesAsReadByMsgID(callback open_im_sdk_callback.Base, operationID string, conversationID string, clientMsgIDs string) {
 	call(callback, operationID, UserForSDK.Conversation().MarkMessagesAsReadByMsgID, conversationID, clientMsgIDs)
 }
@@ -208,7 +155,7 @@ func HideAllConversations(callback open_im_sdk_callback.Base, operationID string
 }
 
 func DeleteAllMsgFromLocalAndSvr(callback open_im_sdk_callback.Base, operationID string) {
-	call(callback, operationID, UserForSDK.Conversation().DeleteAllMsgFromLocalAndSvr)
+	call(callback, operationID, UserForSDK.Conversation().DeleteAllMsgFromLocalAndServer)
 }
 
 func DeleteAllMsgFromLocal(callback open_im_sdk_callback.Base, operationID string) {
